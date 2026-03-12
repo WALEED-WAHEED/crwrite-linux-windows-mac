@@ -227,7 +227,10 @@ if(Filesystem_FIND_REQUIRED AND NOT Filesystem_FOUND)
 endif()
 
 if (MSVC)
+  # /bigobj is only meaningful for MSVC; avoid passing
+  # MinGW- or ELF-specific flags on other toolchains.
   add_compile_options(/bigobj)
-else ()
+elseif (MINGW)
+  # On MinGW, large object files sometimes need this assembler flag.
   add_compile_options(-Wa,-mbig-obj)
 endif ()
